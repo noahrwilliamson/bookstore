@@ -36,10 +36,12 @@
 		for($i=0; $i<sizeof($rows); $i++){
 		$history= "SELECT bookid, buyer, date, quantity, cost, status, credit_card_number, billing_address, shipping_address FROM orders WHERE buyer='$rows[$i]'";
 		$results = mysqli_query($conn, $history);
+	
+	echo "<h1> Order History </h1><br/>";
+
 	for($i=0; $i<sizeof($rows); $i++){		
 		if(mysqli_num_rows($results)>0){
 			$row = mysqli_fetch_assoc($results);
-			echo "<h1> Order History </h1><br/>";
 			echo "bookid: ".$row["bookid"]."<br/>";
 			echo "Quantity: ".$row["quantity"]."<br/>";
 			echo "Cost: ".$row["cost"]."<br/>";
