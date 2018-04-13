@@ -16,10 +16,10 @@
 		$uid = "SELECT uid FROM users WHERE email='$email'";
 		$results0 = mysqli_query($conn, $uid);
 		$rows = mysqli_fetch_array($results0);
-		for($i=0; $i<sizeof($rows)-1; $i++){
+		for($i=0; $i<sizeof($rows); $i++){
 		$history= "SELECT bookid, buyer, date, quantity, cost, status, credit_card_number, billing_address, shipping_address FROM orders WHERE buyer='$rows[$i]'";
 		$results = mysqli_query($conn, $history);
-
+	for($i=0; $i<sizeof($rows); $i++){		
 		if(mysqli_num_rows($results)>0){
 			$row = mysqli_fetch_assoc($results);
 			echo "<h1> Order History </h1><br/>";
@@ -32,8 +32,6 @@
 			echo "Shipping Address: ".$row["shipping_address"]."<br/>";
 
 		}
-		else{
-			echo "No order history for user";
 	}
 }
 	mysqli_close($conn);
