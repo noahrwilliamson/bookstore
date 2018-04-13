@@ -8,17 +8,19 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 	</head>
 	<body>
-		<h2> Insert User Data </h2>
-		<form action="insertUserDataProcessor.php" method="post">
-			First: <input type="text" name = "first"> <br/>
-			Middle: <input type="text" name = "middle"> <br/>
-			Last: <input type="text" name = "last"> <br/>
-			Age: <input type="number" name = "age"> <br/>
-			Gender: <input type="text" name = "gender"> <br/>
-			Email: <input type="text" name = "email"> <br/>
-			Password: <input type="text" name = "password"> <br/>
-			<input type="submit">
-		</form>
+		<h2 style="text-align: center;"> Register: </h2>
+		<div class="text-center">
+			<form action="insertUserDataProcessor.php" method="post">
+				First: <input type="text" name = "first" placeholder="First Name"> <br/>
+				Middle: <input type="text" name = "middle" placeholder="Middle Name"> <br/>
+				Last: <input type="text" name = "last" placeholder="Last Name"> <br/>
+				Age: <input type="number" name = "age"> <br/>
+				Gender: <input type="text" name = "gender" placeholder="Gender"> <br/>
+				Email: <input type="text" name = "email" placeholder="Email"> <br/>
+				Password: <input type="password" name = "password" placeholder="Password"> <br/>
+				<button type="submit button" class="btn btn-primary">Register</button>
+			</form>
+		</div>
 	</body>
 </html>
 		

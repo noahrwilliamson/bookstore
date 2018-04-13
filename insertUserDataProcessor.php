@@ -8,9 +8,9 @@
 </head>
 <body>
 	<?php
-		$serverName = "127.0.0.1";
-		$userName = "user1";
-		$password = "user1pwd";
+		$serverName='localhost'; // Host name 
+		$userName='root'; // Mysql username 
+		$password=''; // Mysql password 
 		$dbName = "bookstore";
 
 		$conn = mysqli_connect($serverName, $userName, $password, $dbName);

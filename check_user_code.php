@@ -1,10 +1,10 @@
 <?php
 	ob_start();
-	$host="localhost"; // Host name 
-	$username="host"; // Mysql username 
-	$password="123456"; // Mysql password 
-	$db_name="bookstore"; // Database name 
-	$tbl_name="users"; // Table name
+	$host='localhost'; // Host name 
+	$username='root'; // Mysql username 
+	$password=''; // Mysql password 
+	$db_name='bookstore'; // Database name 
+	$tbl_name='users'; // Table name
 
 	// Connect to server and select databse.
 	$con = mysqli_connect("$host", "$username", "$password", "$db_name") or die(mysqli_error($con));
