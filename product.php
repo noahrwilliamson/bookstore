@@ -92,6 +92,7 @@ function displayBooks($searchTerm, $searchType) {
 	        					<h5>' . $r['name'] . ' - ' . $r['authors'] . '</h5>
 	        					<p>$' . $r['price'] . '</p>
 	        					<p>' . $r['description'] . '</p>
+	        					<p style="font-size:10px">Quantity:&nbsp' . $r['quantity'] . '</p>
 	        					<p><a href="order.php?id=' . $r['bid'] .'" class="btn btn-primary" role="button">Order</a></p>
 	      					</div>
 	    			</div>
@@ -123,7 +124,7 @@ function displayBooks($searchTerm, $searchType) {
 				break;
 
 			case "date":
-				$sql .= 'WHERE date LIKE "%' . $searchTerm . '%"';
+				$sql .= 'WHERE publishdate= "' . $searchTerm . '"';
 				break;
 
 			case "price":
@@ -145,6 +146,7 @@ function displayBooks($searchTerm, $searchType) {
 	        					<h5>' . $r['name'] . ' - ' . $r['authors'] . '</h5>
 	        					<p>$' . $r['price'] . '</p>
 	        					<p>' . $r['description'] . '</p>
+	        					<p style="font-size:10px">Quantity:&nbsp' . $r['quantity'] . '</p>
 	        					<p><a href="order.php?id=' . $r['bid'] .'" class="btn btn-primary" role="button">Order</a></p>
 	      					</div>
 	    			</div>
