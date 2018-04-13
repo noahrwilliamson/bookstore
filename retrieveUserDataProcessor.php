@@ -39,7 +39,7 @@
 	
 	echo "<h1> Order History </h1><br/>";
 
-	for($i=0; $i<sizeof($rows); $i++){		
+	for($i=0; $i<sizeof($rows)-1; $i++){		
 		if(mysqli_num_rows($results)>0){
 			$row = mysqli_fetch_assoc($results);
 			echo "bookid: ".$row["bookid"]."<br/>";
