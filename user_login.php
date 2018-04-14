@@ -1,6 +1,6 @@
 <?php
-   ob_start();
    session_start();
+   ob_start();
 ?>
 
 <?
@@ -11,7 +11,7 @@
 <html lang = "en">
    
    <head>
-      <title>user_login</title>
+      <title>Login</title>
       <link href = "css/bootstrap.min.css" rel = "stylesheet">
       
       <style>
@@ -74,7 +74,7 @@
 	
    <body>
       
-      <h2>User Login Page</h2> 
+      <h2>Login</h2> 
       <div class = "container form-signin">
          
          <?php

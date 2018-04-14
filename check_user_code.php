@@ -1,5 +1,7 @@
 <?php
+	session_start();
 	ob_start();
+
 	$host='localhost'; // Host name 
 	$username='root'; // Mysql username 
 	$password=''; // Mysql password 
@@ -29,13 +31,16 @@
 
 	// Mysql_num_row is counting table row
 	$count=mysqli_num_rows($result);
+	
 	// If result matched $username and $password, table row must be 1 row
 	if($count==1){
+		$r = mysqli_fetch_assoc($result);
+		$_SESSION['uid'] = $r['uid'];		# let's set our session variable
+		
 		echo "Login Successful";
-		return true;
+		header('Location: product.php'); // redirect to shopping page after inserting into database
 	}
 	else{
 		echo "Wrong Username or Password";
-		return false;
 }
 ?>

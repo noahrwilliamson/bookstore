@@ -1,16 +1,6 @@
 <html>
 	<?php
-		/*$serverName = "127.0.0.1";
-		$userName = "user1";
-		$password = "user1pwd";
-		$dbName = "bookstore";
-
-		$conn = mysqli_connect($serverName, $userName, $password, $dbName);
-
-		if(!$conn){
-			die("Connection Failed: ".mysqli_connect_error());
-		}
-		*/
+		session_start();
 	
 		$conn = mysqli_connect('localhost', 'root', '');
 		if (!$conn){
@@ -21,6 +11,7 @@
     			die("Database Selection Failed" . mysqli_error($connection));
 		}
 	
+		# necessary bootstrap imports
 		echo '<head><title>My orders</title>
 				<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 				<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -29,10 +20,22 @@
 			</head><body>
 		';
 
-		$email = mysqli_real_escape_string($conn, $_POST["email"]);
-		$uid = "SELECT uid FROM users WHERE email='$email'";
-		$results0 = mysqli_query($conn, $uid);
-		$rows = mysqli_fetch_array($results0);
+		# $email = mysqli_real_escape_string($conn, $_POST["email"]);
+		$sql = "SELECT * FROM orders WHERE buyer=" . $_SESSION['uid'];
+		$res = mysqli_query($conn, $sql);
+
+		echo '<h2>Order History</h2><br>';
+
+		while($r = mysqli_fetch_assoc($res)) {	# loop through orders and display
+			echo "<p>bookid: ".$r['bookid']."</p>";
+			echo "<p>Quantity: ".$r['quantity']."</p>";
+			echo "<p>Cost: ".$r['cost']."</p>";
+			echo "<p>Status: ".$r['status']."</p>";
+			echo "<p>Credit Card: ".$r['credit_card_number']."</p>";
+			echo "<p>Billing Address: ".$r['billing_address']."</p>";
+			echo "<p>Shipping Address: ".$r['shipping_address']."</p>";
+		}
+		/*$rows = mysqli_fetch_array($results0);
 		for($i=0; $i<sizeof($rows); $i++){
 		$history= "SELECT bookid, buyer, date, quantity, cost, status, credit_card_number, billing_address, shipping_address FROM orders WHERE buyer='$rows[$i]'";
 		$results = mysqli_query($conn, $history);
@@ -51,8 +54,8 @@
 			echo "Shipping Address: ".$row["shipping_address"]."<br/>";
 
 		}
-	}
-}
+		}
+	}*/
 	mysqli_close($conn);
 	
 ?>

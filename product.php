@@ -9,6 +9,8 @@
 # Products page to display all available products and allow a faceted search.
 
 
+session_start();		# get session started
+
 # connect to database
 $con = mysqli_connect('localhost', 'root', '');
 if (!$con){
@@ -57,7 +59,7 @@ function drawSearchForm() {
 				</style>
 			</head>
 			<body>
-			<div class="topcorner"><a href="retrieveUserData.html">My Account</a></div>';   # link to my account page
+			<div class="topcorner"><a href="retrieveUserDataProcessor.php">My Account</a></div>';   # link to my account page
 	
 	echo '
 		<br>

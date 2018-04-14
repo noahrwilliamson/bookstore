@@ -7,6 +7,7 @@
 #
 # to handle ordering after user clicks order button while viewing products
 
+session_start();		# get session started
 
 # connect to database
 $con = mysqli_connect('localhost', 'root', '');
@@ -37,9 +38,11 @@ echo '
 
 
 if( isset( $_GET['id'] )){
+	$bid = $_GET['id'];
 	$sql = 'SELECT * FROM books WHERE bid= "' . $_GET['id'] .'"';
 	$res = mysqli_query($con, $sql); 	# get ordered book by id from books table in db
 	$r = mysqli_fetch_assoc($res);
+
 
 	echo '<h2>Order Success!</h2>';
 
@@ -64,7 +67,16 @@ if( isset( $_GET['id'] )){
 			';
 
 	# now insert book into orders table
+	# TODO: add way to get credit card number and billing/shipping address
+	$osql = 'INSERT INTO orders(bookid, buyer, date, quantity, cost, status, credit_card_number, billing_address, shipping_address) 
+				VALUES (' . $bid . ', ' . $_SESSION['uid'] . ', CURDATE(), 1, ' . $r['price'] . ', "ordered", 1234123412341234, "1234", "1234")';
 
+	if(mysqli_query($con, $osql)){		# query successful
+		echo '<p>Inserted into orders table with no problems</p>';
+	}
+	else{					# error
+		echo "error in query " . mysqli_error($con);
+	}
 }
 else{
 	echo '
