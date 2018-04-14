@@ -1,3 +1,7 @@
+/*
+ * Author: Noah Williamson
+ *
+ */
 
 /* drop previous instance of database */
 DROP DATABASE IF EXISTS bookstore;
