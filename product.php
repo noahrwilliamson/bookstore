@@ -59,7 +59,8 @@ function drawSearchForm() {
 				</style>
 			</head>
 			<body>
-			<div class="topcorner"><a href="retrieveUserDataProcessor.php">My Account</a></div>';   # link to my account page
+			<div class="topcorner"><a href="retrieveUserDataProcessor.php">My Account</a></div>
+			<div class="topcorner"><a href="logout.php"><br>Logout</a></div>';
 	
 	echo '
 		<br>
