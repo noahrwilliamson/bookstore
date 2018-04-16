@@ -58,9 +58,20 @@ function drawSearchForm() {
     				}
 				</style>
 			</head>
-			<body>
-			<div class="topcorner"><a href="retrieveUserDataProcessor.php">My Account</a></div>
-			<div class="topcorner"><a href="logout.php"><br>Logout</a></div>';
+			<body>';
+
+	# add navbar
+	echo '<nav class="navbar navbar-default">
+  				<div class="container-fluid">
+    				<div class="navbar-header">
+      					<a class="navbar-brand" href="product.php"><span class="glyphicon glyphicon-home"></span>Bookstore</a>
+    				</div>
+    				<ul class="nav navbar-nav navbar-right">
+      					<li><a href="my_account.php"><span class="glyphicon glyphicon-briefcase"></span>My Account</a></li>
+      					<li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+    				</ul>
+  				</div>
+			</nav>';
 	
 	echo '
 		<br>

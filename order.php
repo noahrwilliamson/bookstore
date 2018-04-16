@@ -35,6 +35,19 @@ echo '
 			<body>
 	 ';
 
+# add navbar
+echo '<nav class="navbar navbar-default">
+  		<div class="container-fluid">
+   			<div class="navbar-header">
+      			<a class="navbar-brand" href="product.php"><span class="glyphicon glyphicon-home"></span>Bookstore</a>
+    		</div>
+    		<ul class="nav navbar-nav navbar-right">
+      			<li><a href="my_account.php"><span class="glyphicon glyphicon-briefcase"></span>My Account</a></li>
+      			<li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+    		</ul>
+  		</div>
+	</nav>';
+
 
 
 if( isset( $_GET['id'] )){
