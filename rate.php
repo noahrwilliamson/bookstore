@@ -1,11 +1,11 @@
-<?php
-# order.php
+<?php 
+# rate.php
 #
 # Author: Noah Williamson
 # Course: CS405G
 # Final Project
 #
-# to handle ordering after user clicks order button while viewing products
+# to handle rating books
 
 session_start();		# get session started
 
@@ -48,49 +48,23 @@ echo '<nav class="navbar navbar-default">
   		</div>
 	</nav>';
 
-
-if( isset( $_GET['id'] )){
+if( isset( $_GET['id'] )){		# check to ensure we know what book to rate
 	$bid = $_GET['id'];
-	$sql = 'SELECT * FROM books WHERE bid= "' . $_GET['id'] .'"';
-	$res = mysqli_query($con, $sql); 	# get ordered book by id from books table in db
-	$r = mysqli_fetch_assoc($res);
-
-
-	echo '<h2>Order Success!</h2>';
 
 	echo '
-				<div class="col-sm-6 col-md-3">
-	    			<div class="thumbnail">
-	      				<img src="img.png" alt="' . $r['name'] . '" style="width:100px; height:100px">
-	      					<div class="caption">
-	        					<h5>' . $r['name'] . ' - ' . $r['authors'] . '</h5>
-	        					<p>$' . $r['price'] . '</p>
-	        					<p>' . $r['description'] . '</p>
-	        					<p style="font-size:10px">Quantity:&nbsp' . $r['quantity'] . '</p>
-	        					<p style="font-size:10px"> ISBN:&nbsp' . $r['isbn'] . '</p>
-	        					<p style="font-size:10px"> Subject:&nbsp' . $r['subject'] . '</p>
-	        					<p style="font-size:10px"> Language:&nbsp' . $r['language'] . '</p>
-	        					<p style="font-size:10px"> Publisher:&nbsp' . $r['publisher'] . '</p>
-	        					<p style="font-size:10px"> Publish Date:&nbsp' . $r['publishdate'] . '</p>
-	        					<br><p><a href="product.php" class="btn btn-primary" role="button">Continue Shopping</a></p>
-	      					</div>
-	    			</div>
-	  			</div>
-			';
-
-	# now insert book into orders table
-	# TODO: add way to get credit card number and billing/shipping address
-	$osql = 'INSERT INTO orders(bookid, buyer, date, quantity, cost, status, credit_card_number, billing_address, shipping_address) 
-				VALUES (' . $bid . ', ' . $_SESSION['uid'] . ', CURDATE(), 1, ' . $r['price'] . ', "ordered", 1234123412341234, "1234", "1234")';
-
-	if(mysqli_query($con, $osql)){		# query successful
-		echo '<p>Inserted into orders table successfully.</p>';
-	}
-	else{					# error
-		echo "error in query " . mysqli_error($con);
-	}
+		<h1>Rate book</h1>
+		<br>
+		<div class="text-center">
+			<form method="POST" action="addRate.php">
+				<input type="text" name="bookid" value="' . $bid . '" readonly><br>
+				<input type="text" name="rating" placeholder="Rating from 1 to 5..."><br>
+				<textarea name="description" placeholder="Write a short description here..."><br>
+				<button type="submit button" class="btn btn-primary">Add review</button><br>
+			</form>
+		</div>
+	';
 }
-else{
+else {		# make sure to send back if they try to rate 
 	echo '
 		<div class="text-center">
 			<h1>Oops!</h1>
@@ -101,6 +75,5 @@ else{
 }
 
 echo '</body></html>';
-
 
 ?>

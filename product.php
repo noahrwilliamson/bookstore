@@ -134,7 +134,7 @@ function displayBooks($searchTerm, $searchType) {
 				break;
 
 			case "keyword":
-				$sql .= '';
+				$sql .= 'AS b, keywords AS k WHERE b.bid = k.bookid AND k.keyword LIKE "%' . $searchTerm . '%"';
 				break;
 
 			case "date":
@@ -152,6 +152,11 @@ function displayBooks($searchTerm, $searchType) {
 		echo '<h2>Books with ' . ( ucfirst($searchType) ) . ' matching "' . $searchTerm . '" : </h2><br>';
 
 		while($r = mysqli_fetch_assoc($result)) {		# loop through resultant book array and display
+			
+			$rsql = 'SELECT AVG(rating) avg_rating FROM rating WHERE bookid = "' . $r['bid'] . '"';		# get book rating
+			$ratingResult = mysqli_query($con, $rsql);
+			$rData = mysqli_fetch_assoc($ratingResult);
+			
 			echo '
 				<div class="col-sm-6 col-md-3">
 	    			<div class="thumbnail">
@@ -161,7 +166,9 @@ function displayBooks($searchTerm, $searchType) {
 	        					<p>$' . $r['price'] . '</p>
 	        					<p>' . $r['description'] . '</p>
 	        					<p style="font-size:10px">Quantity:&nbsp' . $r['quantity'] . '</p>
-	        					<p><a href="order.php?id=' . $r['bid'] .'" class="btn btn-primary" role="button">Order</a></p>
+	        					<p>Rating:&nbsp' . $rData['avg_rating'] . '/5</p>
+	        					<p><a href="order.php?id=' . $r['bid'] .'" class="btn btn-primary" role="button">Order</a>&nbsp
+	        					<a href="rate.php?id=' . $r['bid'] .'" class="btn btn-success" role="button">Rate Book</a></p>
 	      					</div>
 	    			</div>
 	  			</div>
