@@ -21,8 +21,8 @@ if (!$select_db){
     die("Database Selection Failed" . mysqli_error($connection));
 }
 
-if( isset( $_GET['id'] ) && isset( $_POST['rating'] ) && isset( $_POST['description'] )){		# check to ensure we know what book to rate
-	$bid = $_GET['id'];
+if( isset( $_POST['bookid'] ) && isset( $_POST['rating'] ) && isset( $_POST['description'] )){		# check to ensure we know what book to rate
+	$bid = $_POST['bookid'];
 	$rate = $_POST['rating'];
 	$desc = $_POST['description'];
 	$uid = $_SESSION['uid'];
@@ -35,7 +35,6 @@ if( isset( $_GET['id'] ) && isset( $_POST['rating'] ) && isset( $_POST['descript
 	header('Location: product.php');	# go back to products
 }
 else{		# if not filled out redirect to rate.php page
-	header('Location: rate.php?id=' . $_GET['id']);
+	header('Location: rate.php?id=' . $_POST['bookid']);
 }
-
 ?>

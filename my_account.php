@@ -12,7 +12,7 @@
 		}
 	
 		# necessary bootstrap imports
-		echo '<head><title>My Account</title>
+		echo '<head><title>My orders</title>
 				<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 				<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 				<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -21,61 +21,54 @@
 		';
 
 		# add navbar
-		echo '
-			<nav class="navbar navbar-expand-md navbar-dark bg-dark">
-    			<div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
-        			<ul class="navbar-nav mr-auto">
-            			<li class="nav-item">
-                			<a class="nav-link" href="product.php">Books</a>
-        	    		</li>
-        			</ul>
-    			</div>
-    			<div class="mx-auto order-0">
-        			<a class="navbar-brand mx-auto" href="#">Group 3 Bookstore</a>
-        			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
-            			<span class="navbar-toggler-icon"></span>
-        			</button>
-    			</div>
-    			<div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-        			<ul class="navbar-nav ml-auto">
-            			<li class="nav-item active">
-                			<a class="nav-link" href="my_account.php"><span class="glyphicon glyphicon-briefcase"></span>My Account</a>
-            			</li>
-            			<li class="nav-item">
-                			<a class="nav-link" href="logout.php"><span class="glyphicon glyphicon-log-out"></span>Logout</a>
-            			</li>
-        			</ul>
-    			</div>
-    		</nav>';
+		echo '<nav class="navbar navbar-default">
+  				<div class="container-fluid">
+    				<div class="navbar-header">
+      					<a class="navbar-brand" href="product.php"><span class="glyphicon glyphicon-home"></span>Bookstore</a>
+    				</div>
+    				<ul class="nav navbar-nav navbar-right">
+      					<li class="active"><a href="my_account.php"><span class="glyphicon glyphicon-briefcase"></span>My Account</a></li>
+      					<li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+    				</ul>
+  				</div>
+			</nav>';
 
-    	$usql = 'SELECT firstName FROM users WHERE uid=' . $_SESSION['uid'];
-    	$uresult = mysqli_query($conn, $usql);
-    	$udata = mysqli_fetch_assoc($uresult);
-    	echo '
-    		<div class = "text-center">
-    			<h4>Hi ' . $udata['firstName'] . ', here are your past orders:</h4>
-    		</div>
-    	';
-
+		# $email = mysqli_real_escape_string($conn, $_POST["email"]);
 		$sql = "SELECT * FROM orders WHERE buyer=" . $_SESSION['uid'];
 		$res = mysqli_query($conn, $sql);
 
-		while($r = mysqli_fetch_assoc($res)) {	# loop through orders and display
-			
-			$tsql = 'SELECT name FROM books WHERE bid=' . $r['bookid'];
-			$tres = mysqli_query($conn, $tsql);
-			$tdata = mysqli_fetch_assoc($tres);		# get book title
+		echo '<h2>Order History</h2><br>';
 
-			echo "<h6>" . $tdata['name'] . "</h6>";
-			echo "<p>Date Ordered: " . $r['date'] . "</p>";
-			echo "<p>Quantity: " . $r['quantity'] . "</p>";
-			echo "<p>Amount paid: " . $r['cost'] . "</p>";
-			echo "<p>Order Status: " . $r['status'] . "</p>";
-			echo "<p>Payment Method: card ending in " . substr($r['credit_card_number'], -4) . "</p>";
-			echo "<p>Billing Address: " . $r['billing_address'] . "</p>";
-			echo "<p>Shipping Address: " . $r['shipping_address'] . "</p><br><br>";
+		while($r = mysqli_fetch_assoc($res)) {	# loop through orders and display
+			echo "<p>bookid: ".$r['bookid']."</p>";
+			echo "<p>Quantity: ".$r['quantity']."</p>";
+			echo "<p>Cost: ".$r['cost']."</p>";
+			echo "<p>Status: ".$r['status']."</p>";
+			echo "<p>Credit Card: ".$r['credit_card_number']."</p>";
+			echo "<p>Billing Address: ".$r['billing_address']."</p>";
+			echo "<p>Shipping Address: ".$r['shipping_address']."</p>";
 		}
-		
+		/*$rows = mysqli_fetch_array($results0);
+		for($i=0; $i<sizeof($rows); $i++){
+		$history= "SELECT bookid, buyer, date, quantity, cost, status, credit_card_number, billing_address, shipping_address FROM orders WHERE buyer='$rows[$i]'";
+		$results = mysqli_query($conn, $history);
+	
+	echo "<h1> Order History </h1><br/>";
+
+	for($i=0; $i<sizeof($rows)-1; $i++){		
+		if(mysqli_num_rows($results)>0){
+			$row = mysqli_fetch_assoc($results);
+			echo "bookid: ".$row["bookid"]."<br/>";
+			echo "Quantity: ".$row["quantity"]."<br/>";
+			echo "Cost: ".$row["cost"]."<br/>";
+			echo "Status: ".$row["status"]."<br/>";
+			echo "Credit Card: ".$row["credit_card_number"]."<br/>";
+			echo "Billing Address: ".$row["billing_address"]."<br/>";
+			echo "Shipping Address: ".$row["shipping_address"]."<br/>";
+
+		}
+		}
+	}*/
 	mysqli_close($conn);
 	
 ?>

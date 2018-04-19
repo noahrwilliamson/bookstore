@@ -25,15 +25,14 @@ if (!$select_db){
 echo '
 		<html>
 			<head>
-				<title>Order</title>
+				<title>Edit User</title>
 
 				<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 				<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 				<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 				<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 			</head>
-			<body>
-	 ';
+			<body>';
 
 # add navbar
 echo '<nav class="navbar navbar-default">
@@ -44,63 +43,46 @@ echo '<nav class="navbar navbar-default">
     		<ul class="nav navbar-nav navbar-right">
       			<li><a href="my_account.php"><span class="glyphicon glyphicon-briefcase"></span>My Account</a></li>
       			<li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+            <li><a href="admin_page.php">Admin Home</a></li>
     		</ul>
   		</div>
 	</nav>';
 
-
-if( isset( $_GET['id'] )){
+if( isset( $_GET['id'] )) {
 	$bid = $_GET['id'];
-	$sql = 'SELECT * FROM books WHERE bid= "' . $_GET['id'] .'"';
+	$sql = 'SELECT * FROM users WHERE uid= "' . $_GET['id'] .'"';
 	$res = mysqli_query($con, $sql); 	# get ordered book by id from books table in db
 	$r = mysqli_fetch_assoc($res);
 
 
-	echo '<h2>Order Success!</h2>';
 
+	echo '<h2>Edit User</h2>';
 	echo '
-				<div class="col-sm-6 col-md-3">
-	    			<div class="thumbnail">
-	      				<img src="img.png" alt="' . $r['name'] . '" style="width:100px; height:100px">
-	      					<div class="caption">
-	        					<h5>' . $r['name'] . ' - ' . $r['authors'] . '</h5>
-	        					<p>$' . $r['price'] . '</p>
-	        					<p>' . $r['description'] . '</p>
-	        					<p style="font-size:10px">Quantity:&nbsp' . $r['quantity'] . '</p>
-	        					<p style="font-size:10px"> ISBN:&nbsp' . $r['isbn'] . '</p>
-	        					<p style="font-size:10px"> Subject:&nbsp' . $r['subject'] . '</p>
-	        					<p style="font-size:10px"> Language:&nbsp' . $r['language'] . '</p>
-	        					<p style="font-size:10px"> Publisher:&nbsp' . $r['publisher'] . '</p>
-	        					<p style="font-size:10px"> Publish Date:&nbsp' . $r['publishdate'] . '</p>
-	        					<br><p><a href="product.php" class="btn btn-primary" role="button">Continue Shopping</a></p>
-	      					</div>
-	    			</div>
-	  			</div>
-			';
+  		<div>
+  			<form action="updateUser.php" method="post">
+          User ID: <input type="text" name = "uid" value="'. $r['uid']. '"readonly> <br/>
+          First Name: <input type="text" name = "firstName" value="'. $r['firstName']. '"> <br/>
+          Middle Name: <input type="text" name = "middleName" value="'. $r['middleName']. '"> <br/>
+        	Last Name: <input type="text" name = "lastName" value="'. $r['lastName']. '"> <br/>
+          Email: <input type="text" name = "email" value="'. $r['email']. '"> <br/>
+          Password: <input type="text" name = "password" value="'. $r['password']. '"> <br/>
+          Age: <input type="text" name = "age" value="'. $r['age']. '"> <br/>
+          Gender: <input type="text" name = "gender" value="'. $r['gender']. '"> <br/>';
 
-	# now insert book into orders table
-	# TODO: add way to get credit card number and billing/shipping address
-	$osql = 'INSERT INTO orders(bookid, buyer, date, quantity, cost, status, credit_card_number, billing_address, shipping_address) 
-				VALUES (' . $bid . ', ' . $_SESSION['uid'] . ', CURDATE(), 1, ' . $r['price'] . ', "ordered", 1234123412341234, "1234", "1234")';
+          if ($r['admin'] == 1) {
+              echo '<input type="hidden" value="0" name="admin">
+              Admin: <input type="checkbox" name = "admin" value= "1" checked = "checked"> <br/>';
 
-	if(mysqli_query($con, $osql)){		# query successful
-		echo '<p>Inserted into orders table successfully.</p>';
-	}
-	else{					# error
-		echo "error in query " . mysqli_error($con);
-	}
+          } else {
+              echo '<input type="hidden" value="0" name="admin">
+              Admin: <input type="checkbox" name = "admin" value= "1"'. $r['admin'].'"> <br/>';
+          }
+          echo'
+          <button type="submit button" name = "button" class="btn btn-primary" value = "Update">Update</button>
+          <button type="submit button" name = "button" class="btn btn-primary" value = "Delete">Delete</button>
+  			</form>
+  		</div>
+  	</body>
+  </html>';
 }
-else{
-	echo '
-		<div class="text-center">
-			<h1>Oops!</h1>
-			<p>Looks like you took a wrong turn.</p>
-			<p><a href="product.php" class="btn btn-primary" role="button">Continue Shopping</a></p>
-		</div>
-	';
-}
-
-echo '</body></html>';
-
-
 ?>
