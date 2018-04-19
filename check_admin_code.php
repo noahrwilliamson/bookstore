@@ -2,10 +2,10 @@
 	session_start();
 	ob_start();
 
-	$host='localhost'; // Host name 
-	$username='root'; // Mysql username 
-	$password=''; // Mysql password 
-	$db_name='bookstore'; // Database name 
+	$host='localhost'; // Host name
+	$username='root'; // Mysql username
+	$password=''; // Mysql password
+	$db_name='bookstore'; // Database name
 	$tbl_name='users'; // Table name
 
 	// Connect to server and select databse.
@@ -13,9 +13,9 @@
 	echo "Connected to MySQL<br />";
 	mysqli_select_db($con, "$db_name") or die(mysqli_error($con));
 	echo "Connected to Database<br />";
-	
-	// Define $username and $password 
-	$email=$_POST['email']; 
+
+	// Define $username and $password
+	$email=$_POST['email'];
 	$password=($_POST['password']);
 
 
@@ -35,9 +35,9 @@
 	if($count==1){
 		$r = mysqli_fetch_assoc($result);
 		$_SESSION['uid'] = $r['uid'];		# let's set our session variable
-		
+
 		echo "Login Successful";
-		header('Location: product.php'); // redirect to shopping page after inserting into database
+		header('Location: admin_page.php'); // redirect to shopping page after inserting into database
 	}
 	else{
 		echo "Wrong Username or Password";
