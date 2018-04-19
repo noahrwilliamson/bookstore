@@ -35,7 +35,7 @@ CREATE TABLE books(
 	language VARCHAR(20), 
 	publisher VARCHAR(50), 
 	publishdate DATE, 
-	price DECIMAL, 
+	price FLOAT, 
 	quantity INT(255));
 
 
@@ -122,7 +122,7 @@ CREATE TABLE orders(
  	cost FLOAT,
  	status VARCHAR(20),
  	credit_card_number VARCHAR(16),
- 	billing_address VARCHAR(50),
- 	shipping_address VARCHAR(50),
+ 	billing_address VARCHAR(1000),
+ 	shipping_address VARCHAR(1000),
  	FOREIGN KEY (bookid) REFERENCES books(bid),
  	FOREIGN KEY (buyer) REFERENCES users(uid));
