@@ -49,7 +49,10 @@ echo '<nav class="navbar navbar-default">
 	</nav>';
 
 
-if( isset( $_GET['id'] )){
+if( isset( $_GET['id'] ) && isset($_POST['cc'] ) && isset( $_POST['shipAddr'] ) && isset($_POST['billAddr']) ){
+	$billing = $_POST['billAddr'];
+	$shipping = $_POST['shipAddr'];		# billing and shipping addresses
+	$ccNum = $_POST['cc'];				# credit card number, TODO: hash this!
 	$bid = $_GET['id'];
 	$sql = 'SELECT * FROM books WHERE bid= "' . $_GET['id'] .'"';
 	$res = mysqli_query($con, $sql); 	# get ordered book by id from books table in db
