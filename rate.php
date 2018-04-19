@@ -25,7 +25,7 @@ if (!$select_db){
 echo '
 		<html>
 			<head>
-				<title>Order</title>
+				<title>Rate</title>
 
 				<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 				<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -35,18 +35,33 @@ echo '
 			<body>
 	 ';
 
-# add navbar
-echo '<nav class="navbar navbar-default">
-  		<div class="container-fluid">
-   			<div class="navbar-header">
-      			<a class="navbar-brand" href="product.php"><span class="glyphicon glyphicon-home"></span>Bookstore</a>
+	# add navbar
+	echo '
+		<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    		<div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+        		<ul class="navbar-nav mr-auto">
+            		<li class="nav-item">
+                		<a class="nav-link" href="product.php">Books</a>
+            		</li>
+        		</ul>
     		</div>
-    		<ul class="nav navbar-nav navbar-right">
-      			<li><a href="my_account.php"><span class="glyphicon glyphicon-briefcase"></span>My Account</a></li>
-      			<li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
-    		</ul>
-  		</div>
-	</nav>';
+    		<div class="mx-auto order-0">
+        		<a class="navbar-brand mx-auto" href="#">Group 3 Bookstore</a>
+        		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+            		<span class="navbar-toggler-icon"></span>
+        		</button>
+    		</div>
+    		<div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+        		<ul class="navbar-nav ml-auto">
+            		<li class="nav-item">
+                		<a class="nav-link" href="my_account.php"><span class="glyphicon glyphicon-briefcase"></span>My Account</a>
+            		</li>
+            		<li class="nav-item">
+                		<a class="nav-link" href="logout.php"><span class="glyphicon glyphicon-log-out"></span>Logout</a>
+            		</li>
+        		</ul>
+    		</div>
+    	</nav>';
 
 if( isset( $_GET['id'] )){		# check to ensure we know what book to rate
 	$bid = $_GET['id'];
@@ -55,11 +70,11 @@ if( isset( $_GET['id'] )){		# check to ensure we know what book to rate
 		<h1>Rate book</h1>
 		<br>
 		<div class="text-center">
-			<form method="POST" action="addRate.php">
-				<input type="text" name="bookid" value="' . $bid . '" readonly><br>
-				<input type="text" name="rating" placeholder="Rating from 1 to 5..."><br>
-				<textarea name="description" placeholder="Write a short description here..."><br>
-				<button type="submit button" class="btn btn-primary">Add review</button><br>
+			<form action="addRate.php?id=' . $_GET['id'] .  '" method="POST">
+				<input type="text" name="rating" placeholder="Rating from 1 to 5..."><br><br>
+				<textarea name="description" placeholder="Write a short description here..."></textarea>
+				<br><br>
+				<button type="submit button" class="btn btn-primary">Add review</button>
 			</form>
 		</div>
 	';
