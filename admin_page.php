@@ -57,17 +57,32 @@ $res2 = mysqli_query($con, $sql2);
   	 ';
 
   # add navbar
-  echo '<nav class="navbar navbar-default">
-    		<div class="container-fluid">
-     			<div class="navbar-header">
-        			<a class="navbar-brand" href="product.php"><span class="glyphicon glyphicon-home"></span>Bookstore</a>
-      		</div>
-      		<ul class="nav navbar-nav navbar-right">
-        			<li><a href="my_account.php"><span class="glyphicon glyphicon-briefcase"></span>My Account</a></li>
-        			<li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
-      		</ul>
-    		</div>
-  	</nav>';
+  echo '
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="admin_page.php">Admin</a>
+                </li>
+            </ul>
+        </div>
+        <div class="mx-auto order-0">
+            <a class="navbar-brand mx-auto" href="#">Group 3 Bookstore</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="admin_page.php"><span class="glyphicon glyphicon-briefcase"></span>Manager Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="logout.php"><span class="glyphicon glyphicon-log-out"></span>Logout</a>
+                </li>
+            </ul>
+        </div>
+      </nav>';
 
 # display books with params set
 function display() {
