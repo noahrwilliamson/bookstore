@@ -1,7 +1,7 @@
 <?php
 
 # product.php
-#
+# 
 # Author: Noah Williamson
 # Course: CS405G
 # Final Project
@@ -14,15 +14,15 @@ session_start();		# get session started
 # connect to database
 $con = mysqli_connect('localhost', 'root', '');
 if (!$con){
-    die("Database Connection Failed" . mysqli_error($con));
+    die("Database Connection Failed" . mysqli_error($connection));
 }
 
 $select_db = mysqli_select_db($con, 'bookstore');
 
 if (!$select_db){
-    die("Database Selection Failed" . mysqli_error($con));
+    die("Database Selection Failed" . mysqli_error($connection));
 }
-
+	
 $sql = "SELECT * FROM books";
 $res = mysqli_query($con, $sql); 	# get all books from books table in db
 
@@ -61,18 +61,33 @@ function drawSearchForm() {
 			<body>';
 
 	# add navbar
-	echo '<nav class="navbar navbar-default">
-  				<div class="container-fluid">
-    				<div class="navbar-header">
-      					<a class="navbar-brand" href="product.php"><span class="glyphicon glyphicon-home"></span>Bookstore</a>
-    				</div>
-    				<ul class="nav navbar-nav navbar-right">
-      					<li><a href="my_account.php"><span class="glyphicon glyphicon-briefcase"></span>My Account</a></li>
-      					<li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
-    				</ul>
-  				</div>
-			</nav>';
-
+	echo '
+		<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    		<div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+        		<ul class="navbar-nav mr-auto">
+            		<li class="nav-item active">
+                		<a class="nav-link" href="product.php">Books</a>
+            		</li>
+        		</ul>
+    		</div>
+    		<div class="mx-auto order-0">
+        		<a class="navbar-brand mx-auto" href="#">Group 3 Bookstore</a>
+        		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+            		<span class="navbar-toggler-icon"></span>
+        		</button>
+    		</div>
+    		<div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+        		<ul class="navbar-nav ml-auto">
+            		<li class="nav-item">
+                		<a class="nav-link" href="my_account.php"><span class="glyphicon glyphicon-briefcase"></span>My Account</a>
+            		</li>
+            		<li class="nav-item">
+                		<a class="nav-link" href="logout.php"><span class="glyphicon glyphicon-log-out"></span>Logout</a>
+            		</li>
+        		</ul>
+    		</div>
+    	</nav>';
+	
 	echo '
 		<br>
 		<div class="text-center">
@@ -94,10 +109,25 @@ function drawSearchForm() {
 # display books with params set
 function displayBooks($searchTerm, $searchType) {
 	global $res;
+	global $con;
 
 	if($searchTerm == "" || $searchType == "") {		# if searchTerm or searchType is empty, display all books
 		echo '<h2>All books:</h2><br>';
+		
 		while($r = mysqli_fetch_assoc($res)) {		# loop through books and display
+			$rsql = 'SELECT FORMAT(AVG(rating), 1) avg_rating FROM ratings WHERE bookid = ' . $r['bid'];		# get book rating
+			$ratingResult = mysqli_query($con, $rsql);
+			$rating = "";
+			$rData = "";
+			
+			$rData = mysqli_fetch_assoc($ratingResult);
+			$rating = $rData['avg_rating'];
+			$rating .= '/5.0';
+
+			if($rData['avg_rating'] == ''){
+				$rating = 'No ratings yet.';
+			}
+			
 			echo '
 				<div class="col-sm-6 col-md-3">
 	    			<div class="thumbnail">
@@ -107,7 +137,9 @@ function displayBooks($searchTerm, $searchType) {
 	        					<p>$' . $r['price'] . '</p>
 	        					<p>' . $r['description'] . '</p>
 	        					<p style="font-size:10px">Quantity:&nbsp' . $r['quantity'] . '</p>
-	        					<p><a href="order.php?id=' . $r['bid'] .'" class="btn btn-primary" role="button">Order</a></p>
+	        					<p>Rating:&nbsp' . $rating . '</p>
+	        					<p><a href="order.php?id=' . $r['bid'] .'" class="btn btn-primary" role="button">Order</a>&nbsp
+	        					<a href="rate.php?id=' . $r['bid'] .'" class="btn btn-success" role="button">Rate Book</a></p>
 	      					</div>
 	    			</div>
 	  			</div>
@@ -116,8 +148,7 @@ function displayBooks($searchTerm, $searchType) {
 
 	}
 	else {					# attempt to display books with specified search terms
-
-		global $con;
+		
 		$sql = 'SELECT * FROM books ';
 
 		switch ($searchType) {			# append WHERE clause to SQL statement based on searchType
@@ -152,11 +183,20 @@ function displayBooks($searchTerm, $searchType) {
 		echo '<h2>Books with ' . ( ucfirst($searchType) ) . ' matching "' . $searchTerm . '" : </h2><br>';
 
 		while($r = mysqli_fetch_assoc($result)) {		# loop through resultant book array and display
-
-			$rsql = 'SELECT AVG(rating) avg_rating FROM rating WHERE bookid = "' . $r['bid'] . '"';		# get book rating
+			
+			$rsql = 'SELECT FORMAT(AVG(rating), 1) avg_rating FROM ratings WHERE bookid = ' . $r['bid'];		# get book rating
 			$ratingResult = mysqli_query($con, $rsql);
+			$rating = "";
+			$rData = "";
+			
 			$rData = mysqli_fetch_assoc($ratingResult);
+			$rating = $rData['avg_rating'];
+			$rating .= '/5.0';
 
+			if($rData['avg_rating'] == ''){
+				$rating = 'No ratings yet.';
+			}
+			
 			echo '
 				<div class="col-sm-6 col-md-3">
 	    			<div class="thumbnail">
@@ -166,7 +206,7 @@ function displayBooks($searchTerm, $searchType) {
 	        					<p>$' . $r['price'] . '</p>
 	        					<p>' . $r['description'] . '</p>
 	        					<p style="font-size:10px">Quantity:&nbsp' . $r['quantity'] . '</p>
-	        					<p>Rating:&nbsp' . $rData['avg_rating'] . '/5</p>
+	        					<p>Rating:&nbsp' . $rating . '</p>
 	        					<p><a href="order.php?id=' . $r['bid'] .'" class="btn btn-primary" role="button">Order</a>&nbsp
 	        					<a href="rate.php?id=' . $r['bid'] .'" class="btn btn-success" role="button">Rate Book</a></p>
 	      					</div>
@@ -178,7 +218,7 @@ function displayBooks($searchTerm, $searchType) {
 	}
 }
 
-drawSearchForm();	# draw search form
+drawSearchForm();	# draw search form at the top
 
 if( isset($_POST['searchTerm']) && isset($_POST['searchType']) ) { 		# check if search param is set
 

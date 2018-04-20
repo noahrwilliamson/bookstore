@@ -35,22 +35,42 @@ echo '
 			<body>
 	 ';
 
-# add navbar
-echo '<nav class="navbar navbar-default">
-  		<div class="container-fluid">
-   			<div class="navbar-header">
-      			<a class="navbar-brand" href="product.php"><span class="glyphicon glyphicon-home"></span>Bookstore</a>
+	# add navbar
+	echo '
+		<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    		<div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+        		<ul class="navbar-nav mr-auto">
+            		<li class="nav-item">
+                		<a class="nav-link" href="product.php">Books</a>
+            		</li>
+        		</ul>
     		</div>
-    		<ul class="nav navbar-nav navbar-right">
-      			<li><a href="my_account.php"><span class="glyphicon glyphicon-briefcase"></span>My Account</a></li>
-      			<li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
-    		</ul>
-  		</div>
-	</nav>';
+    		<div class="mx-auto order-0">
+        		<a class="navbar-brand mx-auto" href="#">Group 3 Bookstore</a>
+        		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+            		<span class="navbar-toggler-icon"></span>
+        		</button>
+    		</div>
+    		<div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+        		<ul class="navbar-nav ml-auto">
+            		<li class="nav-item">
+                		<a class="nav-link" href="my_account.php"><span class="glyphicon glyphicon-briefcase"></span>My Account</a>
+            		</li>
+            		<li class="nav-item">
+                		<a class="nav-link" href="logout.php"><span class="glyphicon glyphicon-log-out"></span>Logout</a>
+            		</li>
+        		</ul>
+    		</div>
+    	</nav>';
 
 
-if( isset( $_GET['id'] )){
+if( isset( $_GET['id'] ) && isset($_POST['cc'] ) && isset( $_POST['shipAddr'] ) && isset($_POST['billAddr']) ){
+	$billing = $_POST['billAddr'];
+	$shipping = $_POST['shipAddr'];		# billing and shipping addresses
+	$ccNum = $_POST['cc'];				# credit card number, TODO: hash this!
+	
 	$bid = $_GET['id'];
+	
 	$sql = 'SELECT * FROM books WHERE bid= "' . $_GET['id'] .'"';
 	$res = mysqli_query($con, $sql); 	# get ordered book by id from books table in db
 	$r = mysqli_fetch_assoc($res);
@@ -58,7 +78,7 @@ if( isset( $_GET['id'] )){
 
 	echo '<h2>Order Success!</h2>';
 
-	echo '
+	echo '	<h5>Order details:</h5>
 				<div class="col-sm-6 col-md-3">
 	    			<div class="thumbnail">
 	      				<img src="img.png" alt="' . $r['name'] . '" style="width:100px; height:100px">
@@ -81,14 +101,53 @@ if( isset( $_GET['id'] )){
 	# now insert book into orders table
 	# TODO: add way to get credit card number and billing/shipping address
 	$osql = 'INSERT INTO orders(bookid, buyer, date, quantity, cost, status, credit_card_number, billing_address, shipping_address) 
-				VALUES (' . $bid . ', ' . $_SESSION['uid'] . ', CURDATE(), 1, ' . $r['price'] . ', "ordered", 1234123412341234, "1234", "1234")';
+				VALUES (' . $bid . ', ' . $_SESSION['uid'] . ', CURDATE(), 1, ' . $r['price'] . ', "ordered",' . $ccNum . ', "' . $billing . '", "' . $shipping . '")';
 
 	if(mysqli_query($con, $osql)){		# query successful
-		echo '<p>Inserted into orders table successfully.</p>';
+		echo '<p>Thank you for your order.</p>';
 	}
 	else{					# error
 		echo "error in query " . mysqli_error($con);
 	}
+}
+elseif( isset( $_GET['id'] ) ){
+	$bid = $_GET['id'];
+	$sql = 'SELECT * FROM books WHERE bid= "' . $bid . '"';
+	$res = mysqli_query($con, $sql); 	# get book to order by id from books table in db
+	$r = mysqli_fetch_assoc($res);
+
+
+	echo '<h2>Confirm Order</h2>';
+
+	echo '
+				<div class="col-sm-6 col-md-3">
+	    			<div class="thumbnail">
+	      				<img src="img.png" alt="' . $r['name'] . '" style="width:100px; height:100px">
+	      					<div class="caption">
+	        					<h5>' . $r['name'] . ' - ' . $r['authors'] . '</h5>
+	        					<p>$' . $r['price'] . '</p>
+	        					<p>' . $r['description'] . '</p>
+	        					<p style="font-size:10px">Quantity:&nbsp' . $r['quantity'] . '</p>
+	        					<p style="font-size:10px"> ISBN:&nbsp' . $r['isbn'] . '</p>
+	        					<p style="font-size:10px"> Subject:&nbsp' . $r['subject'] . '</p>
+	        					<p style="font-size:10px"> Language:&nbsp' . $r['language'] . '</p>
+	        					<p style="font-size:10px"> Publisher:&nbsp' . $r['publisher'] . '</p>
+	        					<p style="font-size:10px"> Publish Date:&nbsp' . $r['publishdate'] . '</p>
+	      					</div>
+	    			</div>
+	  			</div>
+			';
+
+		echo '
+			<div class="text-center">
+			<form method="POST" action="order.php?id=' . $bid . '">
+				<input type="text" name="cc" placeholder="Credit Card Number"><br>
+				<input type="text" name="billAddr" placeholder="Billing Address"><br>
+				<input type="text" name="shipAddr" placeholder="Shipping Address"><br>
+				<button type="submit button" class="btn btn-primary">Confirm Order</button><br>
+			</form>
+			</div>
+			';
 }
 else{
 	echo '
